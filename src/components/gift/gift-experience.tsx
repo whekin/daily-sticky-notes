@@ -30,6 +30,7 @@ import type { GiftExperienceData } from "@/types/gift";
 interface GiftExperienceProps {
   slug: string;
   locale: AppLocale;
+  demoMode?: boolean;
 }
 
 interface CatNoteCardProps {
@@ -347,7 +348,7 @@ function GiftLoadingState({ copy }: GiftLoadingStateProps) {
   );
 }
 
-export function GiftExperience({ slug, locale }: GiftExperienceProps) {
+export function GiftExperience({ slug, locale, demoMode = false }: GiftExperienceProps) {
   const copy = getLocaleCopy(locale);
   const giftCopy = copy.gift;
   const timezone = useMemo(resolveTimezone, []);
@@ -361,7 +362,7 @@ export function GiftExperience({ slug, locale }: GiftExperienceProps) {
     async function load() {
       setLoading(true);
       try {
-        const nextData = await getGiftExperienceData(slug, timezone, locale);
+        const nextData = await getGiftExperienceData(slug, timezone, locale, demoMode);
         if (!active) {
           return;
         }
@@ -373,6 +374,7 @@ export function GiftExperience({ slug, locale }: GiftExperienceProps) {
         logClientDebug("info", "Gift experience loaded", {
           slug,
           timezone,
+          demoMode,
           source: nextData.source,
           unlockedCount: nextData.context.unlockedCount,
           notesCount: nextData.notes.length,
@@ -389,7 +391,7 @@ export function GiftExperience({ slug, locale }: GiftExperienceProps) {
           });
         }
 
-        if (today) {
+        if (today && !demoMode) {
           void fetch("/api/v1/events/opened", {
             method: "POST",
             headers: {
@@ -418,6 +420,7 @@ export function GiftExperience({ slug, locale }: GiftExperienceProps) {
           slug,
           timezone,
           locale,
+          demoMode,
           error: loadError,
         });
         setError(
@@ -436,7 +439,7 @@ export function GiftExperience({ slug, locale }: GiftExperienceProps) {
     return () => {
       active = false;
     };
-  }, [locale, slug, timezone]);
+  }, [demoMode, locale, slug, timezone]);
 
   if (loading) {
     return <GiftLoadingState copy={giftCopy} />;

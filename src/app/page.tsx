@@ -2,7 +2,6 @@ import { Heart, NotebookPen } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { env } from "@/lib/env";
 import {
   buildLocaleHref,
   getLocaleCopy,
@@ -16,10 +15,9 @@ interface HomePageProps {
 }
 
 export default async function Home({ searchParams }: HomePageProps) {
-  const slug = env.GIFT_SECRET_SLUG ?? "demo-secret";
   const locale = resolveLocaleFromSearchParams(await searchParams);
   const copy = getLocaleCopy(locale);
-  const giftPath = buildLocaleHref(`/gift/${slug}`, locale);
+  const giftPath = buildLocaleHref("/gift/demo-secret?mode=demo", locale);
 
   return (
     <main

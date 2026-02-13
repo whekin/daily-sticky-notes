@@ -72,7 +72,17 @@ export async function getGiftExperienceData(
   slug: string,
   timezone: string,
   locale: AppLocale,
+  demoMode = false,
 ): Promise<GiftExperienceData> {
+  if (demoMode) {
+    logClientDebug("info", "Using forced local demo mode", {
+      slug,
+      timezone,
+      locale,
+    });
+    return buildFallbackData(timezone, locale);
+  }
+
   const client = getBrowserSupabaseClient();
 
   if (!client) {

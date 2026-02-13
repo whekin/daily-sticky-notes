@@ -18,5 +18,8 @@ describe("i18n", () => {
 
   it("builds locale-aware links", () => {
     expect(buildLocaleHref("/gift/demo", "ru")).toBe("/gift/demo?lang=ru");
+    expect(buildLocaleHref("/gift/demo-secret?mode=demo", "ru")).toBe(
+      "/gift/demo-secret?mode=demo&lang=ru",
+    );
   });
 });

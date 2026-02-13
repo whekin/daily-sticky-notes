@@ -7,6 +7,7 @@ export const DEFAULT_LOCALE: AppLocale = "en";
 export interface LocaleSearchParams {
   lang?: string | string[];
   locale?: string | string[];
+  mode?: string | string[];
 }
 
 function normalizeLocaleCandidate(candidate?: string | string[]): string | null {
@@ -42,7 +43,10 @@ export function resolveLocaleFromSearchParams(searchParams?: LocaleSearchParams)
 }
 
 export function buildLocaleHref(pathname: string, locale: AppLocale): string {
-  return `${pathname}?lang=${locale}`;
+  const [basePath, existingQuery = ""] = pathname.split("?");
+  const searchParams = new URLSearchParams(existingQuery);
+  searchParams.set("lang", locale);
+  return `${basePath}?${searchParams.toString()}`;
 }
 
 export interface HomeCopy {

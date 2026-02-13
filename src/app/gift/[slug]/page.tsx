@@ -12,10 +12,15 @@ interface GiftPageProps {
 
 export default async function GiftPage({ params, searchParams }: GiftPageProps) {
   const { slug } = await params;
-  const locale = resolveLocaleFromSearchParams(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const locale = resolveLocaleFromSearchParams(resolvedSearchParams);
+  const modeValue = Array.isArray(resolvedSearchParams.mode)
+    ? resolvedSearchParams.mode[0]
+    : resolvedSearchParams.mode;
+  const isDemoMode = modeValue === "demo";
 
   const expectedSlug = env.GIFT_SECRET_SLUG;
-  if (expectedSlug && slug !== expectedSlug) {
+  if (!isDemoMode && expectedSlug && slug !== expectedSlug) {
     notFound();
   }
 
@@ -24,7 +29,7 @@ export default async function GiftPage({ params, searchParams }: GiftPageProps) 
       lang={locale}
       className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-12 sm:px-10"
     >
-      <GiftExperience slug={slug} locale={locale} />
+      <GiftExperience slug={slug} locale={locale} demoMode={isDemoMode} />
     </main>
   );
 }
