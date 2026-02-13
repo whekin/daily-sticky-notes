@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { logClientDebug } from "@/lib/client-debug";
 import { GIFT_CONFIG } from "@/lib/config";
+import { buildDemoGiftData } from "@/lib/demo/gift-demo";
 import { calculateUnlockContext } from "@/lib/gift-time";
 import { type AppLocale, getLocaleCopy } from "@/lib/i18n";
 import { publicEnv } from "@/lib/public-env";
@@ -80,7 +81,7 @@ export async function getGiftExperienceData(
       timezone,
       locale,
     });
-    return buildFallbackData(timezone, locale);
+    return buildDemoGiftData(timezone, locale);
   }
 
   const client = getBrowserSupabaseClient();
