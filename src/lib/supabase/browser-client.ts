@@ -7,9 +7,9 @@ let browserClient: SupabaseClient | null = null;
 
 export function getBrowserSupabaseClient(): SupabaseClient | null {
   const url = publicEnv.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const publicKey = publicEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  if (!url || !anonKey) {
+  if (!url || !publicKey) {
     return null;
   }
 
@@ -17,7 +17,7 @@ export function getBrowserSupabaseClient(): SupabaseClient | null {
     return browserClient;
   }
 
-  browserClient = createClient(url, anonKey, {
+  browserClient = createClient(url, publicKey, {
     auth: {
       persistSession: false,
     },

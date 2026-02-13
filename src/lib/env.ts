@@ -16,8 +16,8 @@ const envSchema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     NEXT_PUBLIC_SUPABASE_URL: optionalUrl,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: optionalString,
-    SUPABASE_SERVICE_ROLE_KEY: optionalString,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: optionalString,
+    SUPABASE_SECRET_KEY: optionalString,
     DATABASE_URL: optionalString,
     GIFT_SECRET_SLUG: optionalString,
     GIFT_START_DATE: z

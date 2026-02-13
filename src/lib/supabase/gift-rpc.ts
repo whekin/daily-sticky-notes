@@ -80,7 +80,7 @@ export async function getGiftExperienceData(
       slug,
       timezone,
       hasSupabaseUrl: Boolean(publicEnv.NEXT_PUBLIC_SUPABASE_URL),
-      hasAnonKey: Boolean(publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+      hasPublishableKey: Boolean(publicEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
       locale,
     });
     return buildFallbackData(timezone, locale);

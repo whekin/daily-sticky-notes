@@ -31,4 +31,4 @@ order by day_index;
 - Missing execute grants on RPC functions.
 - Bad env var in `.env.local` or Vercel settings.
 - `DATABASE_URL` not set for Drizzle commands.
-- `SUPABASE_SERVICE_ROLE_KEY` missing for server health/event insert paths.
+- `SUPABASE_SECRET_KEY` missing for server health/event insert paths.

@@ -5,9 +5,9 @@ let serviceClient: SupabaseClient | null = null;
 
 export function getServerSupabaseClient(): SupabaseClient | null {
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
+  const secretKey = env.SUPABASE_SECRET_KEY;
 
-  if (!url || !serviceRoleKey) {
+  if (!url || !secretKey) {
     return null;
   }
 
@@ -15,7 +15,7 @@ export function getServerSupabaseClient(): SupabaseClient | null {
     return serviceClient;
   }
 
-  serviceClient = createClient(url, serviceRoleKey, {
+  serviceClient = createClient(url, secretKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
