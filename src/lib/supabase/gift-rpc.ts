@@ -4,6 +4,7 @@ import { z } from "zod";
 import { logClientDebug } from "@/lib/client-debug";
 import { GIFT_CONFIG } from "@/lib/config";
 import { calculateUnlockContext } from "@/lib/gift-time";
+import { type AppLocale, getLocaleCopy } from "@/lib/i18n";
 import { publicEnv } from "@/lib/public-env";
 import { getBrowserSupabaseClient } from "@/lib/supabase/browser-client";
 import type { GiftExperienceData } from "@/types/gift";
@@ -37,7 +38,8 @@ function unwrapSingleRow<T>(payload: T[] | T): T {
   return payload;
 }
 
-function buildFallbackData(timezone: string): GiftExperienceData {
+function buildFallbackData(timezone: string, locale: AppLocale): GiftExperienceData {
+  const copy = getLocaleCopy(locale);
   const context = calculateUnlockContext({
     startDate: GIFT_CONFIG.startDate,
     unlockHour: GIFT_CONFIG.unlockHour,
@@ -52,8 +54,8 @@ function buildFallbackData(timezone: string): GiftExperienceData {
       dayIndex,
       body:
         dayIndex === context.dayIndex
-          ? "Today's note will appear here once Supabase is connected."
-          : `Archived note #${dayIndex}`,
+          ? copy.fallback.todaysNotePending
+          : copy.fallback.archivedNoteLabel(dayIndex),
       imageUrl: null,
       isToday: dayIndex === context.dayIndex,
     };
@@ -69,6 +71,7 @@ function buildFallbackData(timezone: string): GiftExperienceData {
 export async function getGiftExperienceData(
   slug: string,
   timezone: string,
+  locale: AppLocale,
 ): Promise<GiftExperienceData> {
   const client = getBrowserSupabaseClient();
 
@@ -78,8 +81,9 @@ export async function getGiftExperienceData(
       timezone,
       hasSupabaseUrl: Boolean(publicEnv.NEXT_PUBLIC_SUPABASE_URL),
       hasAnonKey: Boolean(publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+      locale,
     });
-    return buildFallbackData(timezone);
+    return buildFallbackData(timezone, locale);
   }
 
   const contextResult = await client.rpc("rpc_get_unlock_context", {

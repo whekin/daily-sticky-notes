@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Manrope, Playfair_Display } from "next/font/google";
+import { Bad_Script, Manrope, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -12,8 +12,9 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
+const badScript = Bad_Script({
+  variable: "--font-bad-script",
+  weight: "400",
   subsets: ["latin", "cyrillic"],
 });
 
@@ -29,7 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${playfair.variable} ${caveat.variable} antialiased`}>
+      <body
+        className={`${manrope.variable} ${playfair.variable} ${badScript.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

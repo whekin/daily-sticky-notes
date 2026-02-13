@@ -3,30 +3,62 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { env } from "@/lib/env";
+import {
+  buildLocaleHref,
+  getLocaleCopy,
+  type LocaleSearchParams,
+  resolveLocaleFromSearchParams,
+  SUPPORTED_LOCALES,
+} from "@/lib/i18n";
 
-export default function Home() {
+interface HomePageProps {
+  searchParams: Promise<LocaleSearchParams>;
+}
+
+export default async function Home({ searchParams }: HomePageProps) {
   const slug = env.GIFT_SECRET_SLUG ?? "demo-secret";
-  const giftPath = `/gift/${slug}`;
+  const locale = resolveLocaleFromSearchParams(await searchParams);
+  const copy = getLocaleCopy(locale);
+  const giftPath = buildLocaleHref(`/gift/${slug}`, locale);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center px-6 py-16 sm:px-10">
+    <main
+      lang={locale}
+      className="mx-auto flex min-h-screen w-full max-w-5xl items-center px-6 py-16 sm:px-10"
+    >
       <section className="grid w-full gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <p className="text-xs tracking-wide text-muted-foreground uppercase">
+              {copy.languageLabel}
+            </p>
+            <div className="flex items-center gap-1 rounded-full border border-border/80 bg-background/70 p-1">
+              {SUPPORTED_LOCALES.map((nextLocale) => (
+                <Button
+                  key={nextLocale}
+                  asChild
+                  size="xs"
+                  variant={nextLocale === locale ? "secondary" : "ghost"}
+                >
+                  <Link href={buildLocaleHref("/", nextLocale)}>
+                    {copy.localeNames[nextLocale]}
+                  </Link>
+                </Button>
+              ))}
+            </div>
+          </div>
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
             <Heart className="h-4 w-4" />
-            Daily love note
+            {copy.home.badge}
           </p>
           <h1 className="font-display text-5xl leading-tight tracking-tight text-foreground sm:text-6xl">
-            One sticky note a day.
-            <span className="block text-primary">One memory at a time.</span>
+            {copy.home.titlePrimary}
+            <span className="block text-primary">{copy.home.titleAccent}</span>
           </h1>
-          <p className="max-w-xl text-lg text-muted-foreground">
-            This app unlocks a new daily message at 7:00 AM based on the visitor timezone, with
-            previous notes kept in a hidden memory board.
-          </p>
+          <p className="max-w-xl text-lg text-muted-foreground">{copy.home.description}</p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link href={giftPath}>Open gift experience</Link>
+              <Link href={giftPath}>{copy.home.openGift}</Link>
             </Button>
           </div>
         </div>
@@ -35,14 +67,14 @@ export default function Home() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
               <NotebookPen className="h-5 w-5 text-primary" />
-              About this gift
+              {copy.home.aboutTitle}
             </CardTitle>
-            <CardDescription>A slow little ritual, one note each morning.</CardDescription>
+            <CardDescription>{copy.home.aboutDescription}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p>Each day unlocks one new sticky note.</p>
-            <p>Old notes stay archived in the memory board.</p>
-            <p>Open it in the morning and keep a little moment for yourself.</p>
+            <p>{copy.home.noteUnlocksDaily}</p>
+            <p>{copy.home.notesArchived}</p>
+            <p>{copy.home.morningRitual}</p>
           </CardContent>
         </Card>
       </section>
