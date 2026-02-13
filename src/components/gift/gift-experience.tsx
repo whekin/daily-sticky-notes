@@ -31,6 +31,50 @@ function formatTodayHeading(dayIndex: number): string {
   return `Day ${dayIndex}`;
 }
 
+function GiftLoadingState() {
+  return (
+    <section className="relative grid w-full gap-8 lg:grid-cols-[1fr_0.95fr]">
+      <div className="space-y-5">
+        <header className="space-y-2">
+          <div className="h-7 w-36 animate-pulse rounded-full bg-primary/15" />
+          <div className="h-14 w-72 animate-pulse rounded-lg bg-foreground/10" />
+          <div className="h-5 w-80 animate-pulse rounded-md bg-foreground/10" />
+        </header>
+
+        <article
+          className={cn(
+            "relative min-h-[320px] rounded-2xl border border-amber-300/55 bg-[#FFF6BF]/95 p-7 shadow-[0_28px_60px_-24px_rgba(100,77,38,0.55)]",
+            "before:absolute before:-top-3 before:left-1/2 before:h-7 before:w-16 before:-translate-x-1/2 before:rounded-md before:bg-rose-300/70 before:shadow-sm",
+          )}
+        >
+          <div className="mb-4 h-4 w-20 animate-pulse rounded bg-amber-700/15" />
+          <div className="space-y-3">
+            <div className="h-6 w-full animate-pulse rounded bg-amber-700/15" />
+            <div className="h-6 w-[92%] animate-pulse rounded bg-amber-700/15" />
+            <div className="h-6 w-[78%] animate-pulse rounded bg-amber-700/15" />
+          </div>
+          <p className="mt-6 text-sm text-[#6D5B3A]">Loading today&apos;s note...</p>
+        </article>
+      </div>
+
+      <aside className="space-y-4">
+        <Card className="border-primary/20 bg-card/80 shadow-md backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-xl">Preparing memory board</CardTitle>
+            <CardDescription>Fetching unlock context and notes</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="h-4 w-3/4 animate-pulse rounded bg-foreground/10" />
+            <div className="h-4 w-2/3 animate-pulse rounded bg-foreground/10" />
+            <div className="h-4 w-1/2 animate-pulse rounded bg-foreground/10" />
+          </CardContent>
+        </Card>
+        <div className="h-11 w-full animate-pulse rounded-md bg-foreground/10" />
+      </aside>
+    </section>
+  );
+}
+
 export function GiftExperience({ slug }: GiftExperienceProps) {
   const timezone = useMemo(resolveTimezone, []);
   const [data, setData] = useState<GiftExperienceData | null>(null);
@@ -115,14 +159,7 @@ export function GiftExperience({ slug }: GiftExperienceProps) {
   }, [slug, timezone]);
 
   if (loading) {
-    return (
-      <Card className="border-primary/20 bg-card/80 shadow-lg backdrop-blur">
-        <CardHeader>
-          <CardTitle className="font-display text-3xl">Loading today&apos;s note...</CardTitle>
-          <CardDescription>Preparing your memory board.</CardDescription>
-        </CardHeader>
-      </Card>
-    );
+    return <GiftLoadingState />;
   }
 
   if (error) {
