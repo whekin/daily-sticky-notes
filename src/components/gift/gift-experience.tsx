@@ -31,6 +31,8 @@ function formatTodayHeading(dayIndex: number): string {
   return `Day ${dayIndex}`;
 }
 
+const isDev = process.env.NODE_ENV !== "production";
+
 function GiftLoadingState() {
   return (
     <section className="relative grid w-full gap-8 lg:grid-cols-[1fr_0.95fr]">
@@ -53,7 +55,9 @@ function GiftLoadingState() {
             <div className="h-6 w-[92%] animate-pulse rounded bg-amber-700/15" />
             <div className="h-6 w-[78%] animate-pulse rounded bg-amber-700/15" />
           </div>
-          <p className="mt-6 text-sm text-[#6D5B3A]">Loading today&apos;s note...</p>
+          <p className="mt-6 font-handwriting text-2xl text-[#6D5B3A]">
+            Loading today&apos;s note...
+          </p>
         </article>
       </div>
 
@@ -211,7 +215,9 @@ export function GiftExperience({ slug }: GiftExperienceProps) {
                 <CalendarDays className="h-4 w-4" />
                 {formatTodayHeading(todayNote.dayIndex)}
               </p>
-              <p className="text-lg leading-relaxed whitespace-pre-line">{todayNote.body}</p>
+              <p className="font-handwriting text-3xl leading-relaxed whitespace-pre-line">
+                {todayNote.body}
+              </p>
               {todayNote.imageUrl ? (
                 <Image
                   src={todayNote.imageUrl}
@@ -247,9 +253,12 @@ export function GiftExperience({ slug }: GiftExperienceProps) {
               <Clock3 className="h-4 w-4" />
               Timezone: {data.context.timezone}
             </p>
-            <p>Unlock hour: {String(data.context.unlockHour).padStart(2, "0")}:00</p>
-            <p>Start date: {data.context.startDate}</p>
-            <p>Data source: {data.source}</p>
+            <p>
+              A new note appears at {String(data.context.unlockHour).padStart(2, "0")}:00 local
+              time.
+            </p>
+            <p>Unlocked notes stay in your memory board so you can revisit them anytime.</p>
+            {isDev ? <p className="text-xs opacity-70">Debug source: {data.source}</p> : null}
           </CardContent>
         </Card>
 
@@ -273,7 +282,9 @@ export function GiftExperience({ slug }: GiftExperienceProps) {
                       <CardTitle className="text-base">Day {note.dayIndex}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm leading-relaxed whitespace-pre-line">{note.body}</p>
+                      <p className="font-handwriting text-xl leading-relaxed whitespace-pre-line">
+                        {note.body}
+                      </p>
                     </CardContent>
                   </Card>
                 ))

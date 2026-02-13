@@ -14,7 +14,7 @@ export default function Home() {
         <div className="space-y-6">
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
             <Heart className="h-4 w-4" />
-            Valentine project starter
+            Daily love note
           </p>
           <h1 className="font-display text-5xl leading-tight tracking-tight text-foreground sm:text-6xl">
             One sticky note a day.
@@ -28,9 +28,6 @@ export default function Home() {
             <Button asChild size="lg">
               <Link href={giftPath}>Open gift experience</Link>
             </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/api/v1/health">API health</Link>
-            </Button>
           </div>
         </div>
 
@@ -38,15 +35,14 @@ export default function Home() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
               <NotebookPen className="h-5 w-5 text-primary" />
-              Next setup steps
+              About this gift
             </CardTitle>
-            <CardDescription>Connect Supabase and Vercel to make this live.</CardDescription>
+            <CardDescription>A slow little ritual, one note each morning.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p>1. Add `.env.local` from `.env.example`.</p>
-            <p>2. Create tables/RPCs from `drizzle/0000_initial.sql` in Supabase SQL Editor.</p>
-            <p>3. Insert your first gift row and note rows in Supabase dashboard.</p>
-            <p>4. Push to GitHub and connect to Vercel.</p>
+            <p>Each day unlocks one new sticky note.</p>
+            <p>Old notes stay archived in the memory board.</p>
+            <p>Open it in the morning and keep a little moment for yourself.</p>
           </CardContent>
         </Card>
       </section>
