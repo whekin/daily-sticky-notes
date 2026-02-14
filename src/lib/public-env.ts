@@ -11,4 +11,5 @@ export const publicEnv = {
     process.env["NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"],
   ),
   NEXT_PUBLIC_SENTRY_DSN: normalize(process.env["NEXT_PUBLIC_SENTRY_DSN"]),
+  NEXT_PUBLIC_PUSH_VAPID_PUBLIC_KEY: normalize(process.env["NEXT_PUBLIC_PUSH_VAPID_PUBLIC_KEY"]),
 } as const;

@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   check,
   date,
   integer,
@@ -46,9 +47,39 @@ export const giftEvents = pgTable("gift_events", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const giftPushSubscriptions = pgTable(
+  "gift_push_subscriptions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    giftId: uuid("gift_id")
+      .references(() => giftSettings.id, { onDelete: "cascade" })
+      .notNull(),
+    endpoint: text("endpoint").notNull(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    timezone: text("timezone").notNull().default("UTC"),
+    notifyHour: integer("notify_hour").notNull().default(9),
+    notifyMinute: integer("notify_minute").notNull().default(0),
+    enabled: boolean("enabled").notNull().default(true),
+    lastNotifiedOn: date("last_notified_on", { mode: "string" }),
+    lastNotifiedAt: timestamp("last_notified_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("gift_push_subscriptions_endpoint_uq").on(table.endpoint),
+    check("gift_push_subscriptions_notify_hour_check", sql`${table.notifyHour} between 0 and 23`),
+    check(
+      "gift_push_subscriptions_notify_minute_check",
+      sql`${table.notifyMinute} between 0 and 59`,
+    ),
+  ],
+);
+
 export const giftSettingsRelations = relations(giftSettings, ({ many }) => ({
   notes: many(giftNotes),
   events: many(giftEvents),
+  pushSubscriptions: many(giftPushSubscriptions),
 }));
 
 export const giftNotesRelations = relations(giftNotes, ({ one }) => ({
@@ -61,6 +92,13 @@ export const giftNotesRelations = relations(giftNotes, ({ one }) => ({
 export const giftEventsRelations = relations(giftEvents, ({ one }) => ({
   gift: one(giftSettings, {
     fields: [giftEvents.giftId],
+    references: [giftSettings.id],
+  }),
+}));
+
+export const giftPushSubscriptionsRelations = relations(giftPushSubscriptions, ({ one }) => ({
+  gift: one(giftSettings, {
+    fields: [giftPushSubscriptions.giftId],
     references: [giftSettings.id],
   }),
 }));

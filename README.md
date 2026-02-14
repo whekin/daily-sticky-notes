@@ -32,6 +32,10 @@ Open [http://localhost:3000](http://localhost:3000).
 - `GIFT_TOTAL_NOTES`
 - `SENTRY_DSN`
 - `NEXT_PUBLIC_SENTRY_DSN`
+- `NEXT_PUBLIC_PUSH_VAPID_PUBLIC_KEY`
+- `PUSH_VAPID_PRIVATE_KEY`
+- `PUSH_VAPID_SUBJECT`
+- `PUSH_DISPATCH_SECRET`
 
 ## Database Setup
 1. Create a Supabase project.
@@ -59,6 +63,9 @@ bun run db:studio
 - `GET /api/v1/health`
 - `GET /api/v1/runtime`
 - `POST /api/v1/events/opened`
+- `POST /api/v1/notifications/subscriptions`
+- `DELETE /api/v1/notifications/subscriptions`
+- `POST /api/v1/notifications/dispatch` (requires `x-push-dispatch-secret`)
 
 ## Learning Notes
 See `/docs/learning`:

@@ -5,6 +5,7 @@ import { Archive, Clock3, PawPrint, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { PushNotificationSettings } from "@/components/gift/push-notification-settings";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -542,6 +543,8 @@ export function GiftExperience({ slug, locale, demoMode = false }: GiftExperienc
             ) : null}
           </CardContent>
         </Card>
+
+        <PushNotificationSettings copy={giftCopy} slug={slug} />
 
         <Sheet>
           <SheetTrigger asChild>

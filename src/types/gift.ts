@@ -27,3 +27,21 @@ export interface OpenedEventPayload {
   timezone: string;
   dayIndex: number;
 }
+
+export interface PushSubscriptionKeys {
+  p256dh: string;
+  auth: string;
+}
+
+export interface PushSubscriptionPayload {
+  slug: string;
+  timezone: string;
+  notifyHour: number;
+  notifyMinute: number;
+  endpoint: string;
+  keys: PushSubscriptionKeys;
+}
+
+export interface PushSubscriptionDeletePayload {
+  endpoint: string;
+}

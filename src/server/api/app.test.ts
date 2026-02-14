@@ -41,4 +41,48 @@ describe("api app", () => {
     expect(response.status).toBe(202);
     expect(payload).toEqual({ accepted: true });
   });
+
+  it("accepts push subscription upserts", async () => {
+    const response = await app.fetch(
+      new Request("http://localhost/api/v1/notifications/subscriptions", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          slug: "demo-secret",
+          timezone: "UTC",
+          notifyHour: 9,
+          notifyMinute: 15,
+          endpoint: "https://example.com/subscription-endpoint",
+          keys: {
+            p256dh: "p256dh-key",
+            auth: "auth-key",
+          },
+        }),
+      }),
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(202);
+    expect(payload).toEqual({ accepted: true });
+  });
+
+  it("accepts push subscription deletes", async () => {
+    const response = await app.fetch(
+      new Request("http://localhost/api/v1/notifications/subscriptions", {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          endpoint: "https://example.com/subscription-endpoint",
+        }),
+      }),
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(202);
+    expect(payload).toEqual({ accepted: true });
+  });
 });

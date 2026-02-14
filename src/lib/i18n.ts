@@ -86,6 +86,18 @@ export interface GiftCopy {
   memoryBoardTitle: string;
   memoryBoardDescription: string;
   noArchivedNotes: string;
+  notificationsTitle: string;
+  notificationsDescription: string;
+  notificationsUnsupported: string;
+  notificationsPermissionDenied: string;
+  notificationsEnable: string;
+  notificationsDisable: string;
+  notificationsTimeLabel: string;
+  notificationsSaveTime: string;
+  notificationsEnabledStatus: string;
+  notificationsDisabledStatus: string;
+  notificationsSavedStatus: string;
+  notificationsErrorStatus: string;
 }
 
 export interface FallbackCopy {
@@ -149,6 +161,19 @@ const localeCopy: Record<AppLocale, LocaleCopy> = {
       memoryBoardTitle: "Memory board",
       memoryBoardDescription: "Previous notes stay archived here.",
       noArchivedNotes: "No archived notes yet.",
+      notificationsTitle: "Daily reminder",
+      notificationsDescription: "Get a push reminder at your chosen local time.",
+      notificationsUnsupported: "Push notifications are not supported in this browser.",
+      notificationsPermissionDenied:
+        "Notifications are blocked in your browser settings for this site.",
+      notificationsEnable: "Enable notifications",
+      notificationsDisable: "Disable notifications",
+      notificationsTimeLabel: "Reminder time",
+      notificationsSaveTime: "Save reminder time",
+      notificationsEnabledStatus: "Notifications enabled.",
+      notificationsDisabledStatus: "Notifications disabled.",
+      notificationsSavedStatus: "Reminder time saved.",
+      notificationsErrorStatus: "Could not update notification settings.",
     },
     fallback: {
       todaysNotePending: "Today's note will appear here once Supabase is connected.",
@@ -202,6 +227,19 @@ const localeCopy: Record<AppLocale, LocaleCopy> = {
       memoryBoardTitle: "Доска воспоминаний",
       memoryBoardDescription: "Здесь хранятся предыдущие записки.",
       noArchivedNotes: "Пока нет архивных записок.",
+      notificationsTitle: "Ежедневное напоминание",
+      notificationsDescription: "Получай push-напоминание в выбранное местное время.",
+      notificationsUnsupported: "Push-уведомления не поддерживаются в этом браузере.",
+      notificationsPermissionDenied:
+        "Уведомления заблокированы в настройках браузера для этого сайта.",
+      notificationsEnable: "Включить уведомления",
+      notificationsDisable: "Отключить уведомления",
+      notificationsTimeLabel: "Время напоминания",
+      notificationsSaveTime: "Сохранить время напоминания",
+      notificationsEnabledStatus: "Уведомления включены.",
+      notificationsDisabledStatus: "Уведомления отключены.",
+      notificationsSavedStatus: "Время напоминания сохранено.",
+      notificationsErrorStatus: "Не удалось обновить настройки уведомлений.",
     },
     fallback: {
       todaysNotePending: "Сегодняшняя записка появится здесь после подключения Supabase.",

@@ -33,6 +33,10 @@ const envSchema = z
     GIFT_TOTAL_NOTES: z.coerce.number().int().min(1).max(365).default(30),
     SENTRY_DSN: optionalUrl,
     NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
+    NEXT_PUBLIC_PUSH_VAPID_PUBLIC_KEY: optionalString,
+    PUSH_VAPID_PRIVATE_KEY: optionalString,
+    PUSH_VAPID_SUBJECT: optionalString,
+    PUSH_DISPATCH_SECRET: optionalString,
     LOG_LEVEL: z
       .preprocess(
         emptyStringToUndefined,

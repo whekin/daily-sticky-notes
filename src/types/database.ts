@@ -26,6 +26,53 @@ export interface Database {
           payload?: Json;
         };
       };
+      gift_push_subscriptions: {
+        Row: {
+          auth: string;
+          created_at: string;
+          enabled: boolean;
+          endpoint: string;
+          gift_id: string;
+          id: string;
+          last_notified_at: string | null;
+          last_notified_on: string | null;
+          notify_hour: number;
+          notify_minute: number;
+          p256dh: string;
+          timezone: string;
+          updated_at: string;
+        };
+        Insert: {
+          auth: string;
+          created_at?: string;
+          enabled?: boolean;
+          endpoint: string;
+          gift_id: string;
+          id?: string;
+          last_notified_at?: string | null;
+          last_notified_on?: string | null;
+          notify_hour?: number;
+          notify_minute?: number;
+          p256dh: string;
+          timezone?: string;
+          updated_at?: string;
+        };
+        Update: {
+          auth?: string;
+          created_at?: string;
+          enabled?: boolean;
+          endpoint?: string;
+          gift_id?: string;
+          id?: string;
+          last_notified_at?: string | null;
+          last_notified_on?: string | null;
+          notify_hour?: number;
+          notify_minute?: number;
+          p256dh?: string;
+          timezone?: string;
+          updated_at?: string;
+        };
+      };
       gift_notes: {
         Row: {
           body: string;
