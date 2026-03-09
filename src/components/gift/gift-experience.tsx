@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Archive, Clock3, PawPrint, Sparkles } from "lucide-react";
+import { Archive, Bell, Clock3, PawPrint } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -307,44 +307,38 @@ interface GiftLoadingStateProps {
 
 function GiftLoadingState({ copy }: GiftLoadingStateProps) {
   return (
-    <section className="relative grid w-full gap-8 lg:grid-cols-[1fr_0.95fr]">
-      <div className="space-y-5">
-        <header className="space-y-2">
-          <div className="h-7 w-36 animate-pulse rounded-full bg-primary/15" />
-          <div className="h-14 w-72 animate-pulse rounded-lg bg-foreground/10" />
-          <div className="h-5 w-80 animate-pulse rounded-md bg-foreground/10" />
-        </header>
+    <section className="mx-auto w-full max-w-5xl space-y-6">
+      <header className="space-y-3">
+        <div className="h-6 w-28 animate-pulse rounded-full bg-primary/15" />
+        <div className="h-14 w-72 animate-pulse rounded-lg bg-foreground/10" />
+        <div className="h-4 w-56 animate-pulse rounded-md bg-foreground/10" />
+      </header>
 
-        <article
-          className={cn(
-            "relative min-h-[320px] rounded-2xl border border-amber-300/55 bg-[#FFF6BF]/95 p-7 shadow-[0_28px_60px_-24px_rgba(100,77,38,0.55)]",
-            "before:absolute before:-top-3 before:left-1/2 before:h-7 before:w-16 before:-translate-x-1/2 before:rounded-md before:bg-rose-300/70 before:shadow-sm",
-          )}
-        >
-          <div className="mb-4 h-4 w-20 animate-pulse rounded bg-amber-700/15" />
-          <div className="space-y-3">
-            <div className="h-6 w-full animate-pulse rounded bg-amber-700/15" />
-            <div className="h-6 w-[92%] animate-pulse rounded bg-amber-700/15" />
-            <div className="h-6 w-[78%] animate-pulse rounded bg-amber-700/15" />
-          </div>
-          <p className="mt-6 font-handwriting text-2xl text-[#6D5B3A]">{copy.loadingTodayNote}</p>
-        </article>
+      <article
+        className={cn(
+          "relative min-h-[320px] rounded-2xl border border-amber-300/55 bg-[#FFF6BF]/95 p-7 shadow-[0_28px_60px_-24px_rgba(100,77,38,0.55)]",
+          "before:absolute before:-top-3 before:left-1/2 before:h-7 before:w-16 before:-translate-x-1/2 before:rounded-md before:bg-rose-300/70 before:shadow-sm",
+        )}
+      >
+        <div className="mb-4 h-4 w-20 animate-pulse rounded bg-amber-700/15" />
+        <div className="space-y-3">
+          <div className="h-6 w-full animate-pulse rounded bg-amber-700/15" />
+          <div className="h-6 w-[92%] animate-pulse rounded bg-amber-700/15" />
+          <div className="h-6 w-[78%] animate-pulse rounded bg-amber-700/15" />
+        </div>
+        <p className="mt-6 font-handwriting text-2xl text-[#6D5B3A]">{copy.loadingTodayNote}</p>
+      </article>
+
+      <div className="grid gap-3 rounded-[1.75rem] border border-primary/15 bg-card/70 p-4 shadow-sm backdrop-blur sm:grid-cols-[1fr_auto]">
+        <div className="space-y-2">
+          <div className="h-4 w-40 animate-pulse rounded bg-foreground/10" />
+          <div className="h-4 w-52 animate-pulse rounded bg-foreground/10" />
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:w-[18rem]">
+          <div className="h-10 animate-pulse rounded-full bg-foreground/10" />
+          <div className="h-10 animate-pulse rounded-full bg-foreground/10" />
+        </div>
       </div>
-
-      <aside className="space-y-4">
-        <Card className="border-primary/20 bg-card/80 shadow-md backdrop-blur">
-          <CardHeader>
-            <CardTitle className="text-xl">{copy.preparingMemoryBoard}</CardTitle>
-            <CardDescription>{copy.fetchingUnlockContext}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="h-4 w-3/4 animate-pulse rounded bg-foreground/10" />
-            <div className="h-4 w-2/3 animate-pulse rounded bg-foreground/10" />
-            <div className="h-4 w-1/2 animate-pulse rounded bg-foreground/10" />
-          </CardContent>
-        </Card>
-        <div className="h-11 w-full animate-pulse rounded-md bg-foreground/10" />
-      </aside>
     </section>
   );
 }
@@ -463,124 +457,144 @@ export function GiftExperience({ slug, locale, demoMode = false }: GiftExperienc
 
   const todayNote = data.notes.find((note) => note.isToday) ?? data.notes[0];
   const archivedNotes = data.notes.filter((note) => !note.isToday);
+  const dayLabel = todayNote ? giftCopy.dayLabel(todayNote.dayIndex) : giftCopy.dailyInspiration;
 
   return (
-    <section className="relative grid gap-8 lg:grid-cols-[1fr_0.95fr]">
-      <div className="space-y-5">
-        <header className="space-y-2">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs tracking-wide text-primary uppercase">
-              <Sparkles className="h-4 w-4" />
-              {giftCopy.dailyInspiration}
+    <section className="mx-auto w-full max-w-5xl space-y-6">
+      <header className="space-y-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-3">
+            <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-card/70 px-3 py-1 text-[11px] font-medium tracking-[0.22em] text-primary uppercase shadow-sm backdrop-blur">
+              <PawPrint className="h-3.5 w-3.5" />
+              {dayLabel}
             </p>
-            <div className="flex items-center gap-1 rounded-full border border-border/80 bg-background/70 p-1">
-              {SUPPORTED_LOCALES.map((nextLocale) => (
-                <Button
-                  key={nextLocale}
-                  asChild
-                  size="xs"
-                  variant={nextLocale === locale ? "secondary" : "ghost"}
-                >
-                  <Link href={buildLocaleHref(`/gift/${slug}`, nextLocale)}>
-                    {copy.localeNames[nextLocale]}
-                  </Link>
-                </Button>
-              ))}
+            <div className="space-y-2">
+              <h1 className="font-display text-4xl leading-tight text-foreground sm:text-5xl">
+                {giftCopy.forYouToday}
+              </h1>
+              <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
+                {giftCopy.notesUnlocked(data.context.unlockedCount, data.context.totalCount)}
+              </p>
             </div>
           </div>
-          <h1 className="font-display text-5xl leading-tight text-foreground">
-            {giftCopy.forYouToday}
-          </h1>
-          <p className="max-w-md text-muted-foreground">{giftCopy.dailyUnlockDescription}</p>
-        </header>
 
-        <AnimatePresence mode="wait">
-          {todayNote ? (
-            <motion.article
-              key={todayNote.id}
-              initial={{ opacity: 0, rotate: -5, y: 40 }}
-              animate={{ opacity: 1, rotate: -1, y: 0 }}
-              exit={{ opacity: 0, rotate: 4, y: -20 }}
-              transition={{ type: "spring", stiffness: 140, damping: 17 }}
-              className="pt-2"
-            >
-              <CatNoteCard
-                body={todayNote.body}
-                dayLabel={giftCopy.dayLabel(todayNote.dayIndex)}
-                cardImageAlt={giftCopy.cardImageAlt}
-                memoryImageAlt={giftCopy.memoryImageAlt}
-                imageUrl={todayNote.imageUrl}
-              />
-            </motion.article>
-          ) : (
-            <Card className="border-primary/20 bg-card/80">
-              <CardHeader>
-                <CardTitle>{giftCopy.noNoteUnlocked}</CardTitle>
-                <CardDescription>{giftCopy.comeBackLaterToday}</CardDescription>
-              </CardHeader>
-            </Card>
-          )}
-        </AnimatePresence>
+          <div className="flex items-center gap-1 rounded-full border border-border/80 bg-background/80 p-1 shadow-sm backdrop-blur">
+            {SUPPORTED_LOCALES.map((nextLocale) => (
+              <Button
+                key={nextLocale}
+                asChild
+                size="xs"
+                variant={nextLocale === locale ? "secondary" : "ghost"}
+              >
+                <Link href={buildLocaleHref(`/gift/${slug}`, nextLocale)}>
+                  {copy.localeNames[nextLocale]}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+          <p className="inline-flex items-center gap-1.5">
+            <Clock3 className="h-3.5 w-3.5" />
+            {giftCopy.unlockHourDescription(data.context.unlockHour)}
+          </p>
+          <p>{giftCopy.timezoneLabel(data.context.timezone)}</p>
+          {isDev ? <p className="opacity-70">{giftCopy.debugSource(data.source)}</p> : null}
+        </div>
+      </header>
+
+      <AnimatePresence mode="wait">
+        {todayNote ? (
+          <motion.article
+            key={todayNote.id}
+            initial={{ opacity: 0, rotate: -5, y: 40 }}
+            animate={{ opacity: 1, rotate: -1, y: 0 }}
+            exit={{ opacity: 0, rotate: 4, y: -20 }}
+            transition={{ type: "spring", stiffness: 140, damping: 17 }}
+            className="pt-2"
+          >
+            <CatNoteCard
+              body={todayNote.body}
+              dayLabel={giftCopy.dayLabel(todayNote.dayIndex)}
+              cardImageAlt={giftCopy.cardImageAlt}
+              memoryImageAlt={giftCopy.memoryImageAlt}
+              imageUrl={todayNote.imageUrl}
+            />
+          </motion.article>
+        ) : (
+          <Card className="border-primary/20 bg-card/80">
+            <CardHeader>
+              <CardTitle>{giftCopy.noNoteUnlocked}</CardTitle>
+              <CardDescription>{giftCopy.comeBackLaterToday}</CardDescription>
+            </CardHeader>
+          </Card>
+        )}
+      </AnimatePresence>
+
+      <div className="grid gap-4 rounded-[1.75rem] border border-primary/15 bg-card/75 p-4 shadow-[0_18px_40px_-28px_rgba(95,63,42,0.45)] backdrop-blur sm:grid-cols-[1fr_auto] sm:items-center">
+        <div className="space-y-1">
+          <p className="text-sm font-medium text-foreground">{giftCopy.archiveDescription}</p>
+          <p className="text-xs text-muted-foreground">
+            {giftCopy.notesUnlocked(data.context.unlockedCount, data.context.totalCount)}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="rounded-full" variant="outline">
+                {giftCopy.notificationsTitle}
+                <Bell className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+              <SheetHeader>
+                <SheetTitle>{giftCopy.notificationsTitle}</SheetTitle>
+                <SheetDescription>{giftCopy.notificationsDescription}</SheetDescription>
+              </SheetHeader>
+              <div className="p-4">
+                <PushNotificationSettings copy={giftCopy} embedded slug={slug} />
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="rounded-full" variant="secondary">
+                {giftCopy.openMemoryBoard}
+                <Archive className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+              <SheetHeader>
+                <SheetTitle>{giftCopy.memoryBoardTitle}</SheetTitle>
+                <SheetDescription>{giftCopy.memoryBoardDescription}</SheetDescription>
+              </SheetHeader>
+              <div className="space-y-5 p-4">
+                {archivedNotes.length ? (
+                  archivedNotes.map((note) => (
+                    <CatNoteCard
+                      key={note.id}
+                      body={note.body}
+                      dayLabel={giftCopy.dayLabel(note.dayIndex)}
+                      cardImageAlt={giftCopy.cardImageAlt}
+                      memoryImageAlt={giftCopy.memoryImageAlt}
+                      compact
+                    />
+                  ))
+                ) : (
+                  <Card>
+                    <CardContent className="pt-6 text-sm text-muted-foreground">
+                      {giftCopy.noArchivedNotes}
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
-
-      <aside className="space-y-4">
-        <Card className="border-primary/20 bg-card/80 shadow-md backdrop-blur">
-          <CardHeader>
-            <CardTitle className="text-xl">{giftCopy.unlockStatus}</CardTitle>
-            <CardDescription>
-              {giftCopy.notesUnlocked(data.context.unlockedCount, data.context.totalCount)}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p className="flex items-center gap-2">
-              <Clock3 className="h-4 w-4" />
-              {giftCopy.timezoneLabel(data.context.timezone)}
-            </p>
-            <p>{giftCopy.unlockHourDescription(data.context.unlockHour)}</p>
-            <p>{giftCopy.archiveDescription}</p>
-            {isDev ? (
-              <p className="text-xs opacity-70">{giftCopy.debugSource(data.source)}</p>
-            ) : null}
-          </CardContent>
-        </Card>
-
-        <PushNotificationSettings copy={giftCopy} slug={slug} />
-
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button className="w-full justify-between" variant="secondary">
-              {giftCopy.openMemoryBoard}
-              <Archive className="h-4 w-4" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
-            <SheetHeader>
-              <SheetTitle>{giftCopy.memoryBoardTitle}</SheetTitle>
-              <SheetDescription>{giftCopy.memoryBoardDescription}</SheetDescription>
-            </SheetHeader>
-            <div className="space-y-5 p-4">
-              {archivedNotes.length ? (
-                archivedNotes.map((note) => (
-                  <CatNoteCard
-                    key={note.id}
-                    body={note.body}
-                    dayLabel={giftCopy.dayLabel(note.dayIndex)}
-                    cardImageAlt={giftCopy.cardImageAlt}
-                    memoryImageAlt={giftCopy.memoryImageAlt}
-                    compact
-                  />
-                ))
-              ) : (
-                <Card>
-                  <CardContent className="pt-6 text-sm text-muted-foreground">
-                    {giftCopy.noArchivedNotes}
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
-      </aside>
     </section>
   );
 }

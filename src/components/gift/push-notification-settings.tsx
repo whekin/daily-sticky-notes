@@ -11,6 +11,7 @@ import type { PushSubscriptionPayload } from "@/types/gift";
 
 interface PushNotificationSettingsProps {
   slug: string;
+  embedded?: boolean;
   copy: Pick<
     GiftCopy,
     | "notificationsTitle"
@@ -266,7 +267,11 @@ async function deleteSubscription(endpoint: string): Promise<void> {
   });
 }
 
-export function PushNotificationSettings({ slug, copy }: PushNotificationSettingsProps) {
+export function PushNotificationSettings({
+  slug,
+  embedded = false,
+  copy,
+}: PushNotificationSettingsProps) {
   const [supported, setSupported] = useState(false);
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const [loading, setLoading] = useState(true);
@@ -470,21 +475,99 @@ export function PushNotificationSettings({ slug, copy }: PushNotificationSetting
     );
   }, []);
 
-  if (loading) {
-    return (
-      <Card className="border-primary/20 bg-card/80 shadow-md backdrop-blur">
-        <CardHeader>
-          <CardTitle className="text-xl">{copy.notificationsTitle}</CardTitle>
-          <CardDescription>{copy.notificationsDescription}</CardDescription>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          <p className="inline-flex items-center gap-2">
-            <LoaderCircle className="h-4 w-4 animate-spin" />
-            Loading...
-          </p>
-        </CardContent>
-      </Card>
-    );
+  const content = (
+    <div className="space-y-4 text-sm text-muted-foreground">
+      {loading ? (
+        <p className="inline-flex items-center gap-2">
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+          Loading...
+        </p>
+      ) : (
+        <>
+          {!supported ? (
+            <p>{copy.notificationsUnsupported}</p>
+          ) : permission === "denied" ? (
+            <p>{copy.notificationsPermissionDenied}</p>
+          ) : (
+            <>
+              <div className="space-y-2 rounded-xl border border-primary/20 bg-background/70 p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-medium text-foreground">{copy.notificationsTimeLabel}</p>
+                  <p className="inline-flex items-center gap-1 rounded-full border border-border/80 bg-card px-2 py-1 text-xs text-foreground">
+                    <Clock3 className="h-3.5 w-3.5" />
+                    {prettyTime}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <TimeWheelColumn
+                    ariaLabel="Hour"
+                    onChange={updateHour}
+                    options={HOUR_OPTIONS}
+                    value={timeControl.hour12}
+                  />
+                  <TimeWheelColumn
+                    ariaLabel="Minute"
+                    onChange={updateMinute}
+                    options={MINUTE_OPTIONS}
+                    value={timeControl.minute}
+                  />
+                  <TimeWheelColumn
+                    ariaLabel="AM PM"
+                    onChange={(nextValue) => updateMeridiem(nextValue as Meridiem)}
+                    options={MERIDIEM_OPTIONS}
+                    value={timeControl.meridiem}
+                  />
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {PRESET_TIMES.map((preset) => (
+                    <Button
+                      key={preset}
+                      onClick={() => setTimeValue(preset)}
+                      size="xs"
+                      type="button"
+                      variant={preset === timeValue ? "secondary" : "outline"}
+                    >
+                      {preset}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2">
+                {enabled ? (
+                  <>
+                    <Button
+                      disabled={busy || !isValidTime}
+                      onClick={handleSaveTime}
+                      variant="secondary"
+                    >
+                      {copy.notificationsSaveTime}
+                    </Button>
+                    <Button disabled={busy} onClick={handleDisable} variant="outline">
+                      {copy.notificationsDisable}
+                      <BellOff className="ml-2 h-4 w-4" />
+                    </Button>
+                  </>
+                ) : (
+                  <Button disabled={busy || !canSetup || !isValidTime} onClick={handleEnable}>
+                    {copy.notificationsEnable}
+                    <Bell className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+
+          {statusMessage ? <p>{statusMessage}</p> : null}
+        </>
+      )}
+    </div>
+  );
+
+  if (embedded) {
+    return content;
   }
 
   return (
@@ -493,85 +576,7 @@ export function PushNotificationSettings({ slug, copy }: PushNotificationSetting
         <CardTitle className="text-xl">{copy.notificationsTitle}</CardTitle>
         <CardDescription>{copy.notificationsDescription}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 text-sm text-muted-foreground">
-        {!supported ? (
-          <p>{copy.notificationsUnsupported}</p>
-        ) : permission === "denied" ? (
-          <p>{copy.notificationsPermissionDenied}</p>
-        ) : (
-          <>
-            <div className="space-y-2 rounded-xl border border-primary/20 bg-background/70 p-3">
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-medium text-foreground">{copy.notificationsTimeLabel}</p>
-                <p className="inline-flex items-center gap-1 rounded-full border border-border/80 bg-card px-2 py-1 text-xs text-foreground">
-                  <Clock3 className="h-3.5 w-3.5" />
-                  {prettyTime}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2">
-                <TimeWheelColumn
-                  ariaLabel="Hour"
-                  onChange={updateHour}
-                  options={HOUR_OPTIONS}
-                  value={timeControl.hour12}
-                />
-                <TimeWheelColumn
-                  ariaLabel="Minute"
-                  onChange={updateMinute}
-                  options={MINUTE_OPTIONS}
-                  value={timeControl.minute}
-                />
-                <TimeWheelColumn
-                  ariaLabel="AM PM"
-                  onChange={(nextValue) => updateMeridiem(nextValue as Meridiem)}
-                  options={MERIDIEM_OPTIONS}
-                  value={timeControl.meridiem}
-                />
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {PRESET_TIMES.map((preset) => (
-                  <Button
-                    key={preset}
-                    onClick={() => setTimeValue(preset)}
-                    size="xs"
-                    type="button"
-                    variant={preset === timeValue ? "secondary" : "outline"}
-                  >
-                    {preset}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2">
-              {enabled ? (
-                <>
-                  <Button
-                    disabled={busy || !isValidTime}
-                    onClick={handleSaveTime}
-                    variant="secondary"
-                  >
-                    {copy.notificationsSaveTime}
-                  </Button>
-                  <Button disabled={busy} onClick={handleDisable} variant="outline">
-                    {copy.notificationsDisable}
-                    <BellOff className="ml-2 h-4 w-4" />
-                  </Button>
-                </>
-              ) : (
-                <Button disabled={busy || !canSetup || !isValidTime} onClick={handleEnable}>
-                  {copy.notificationsEnable}
-                  <Bell className="ml-2 h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          </>
-        )}
-
-        {statusMessage ? <p>{statusMessage}</p> : null}
-      </CardContent>
+      <CardContent>{content}</CardContent>
     </Card>
   );
 }

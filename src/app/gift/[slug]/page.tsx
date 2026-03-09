@@ -27,7 +27,7 @@ export default async function GiftPage({ params, searchParams }: GiftPageProps) 
   return (
     <main
       lang={locale}
-      className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-12 sm:px-10"
+      className="mx-auto flex min-h-screen w-full max-w-6xl items-start px-6 py-10 sm:px-10 sm:py-14"
     >
       <GiftExperience slug={slug} locale={locale} demoMode={isDemoMode} />
     </main>
